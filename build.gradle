@@ -1,0 +1,85 @@
+plugins {
+	id 'org.springframework.boot' version '2.7.1'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+    id "com.github.node-gradle.node" version "3.1.1"
+	
+}
+
+group = 'com.learnings'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.7.1'
+    implementation 'mysql:mysql-connector-java'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+project(":spring-angular-integration-web") {
+
+    node {
+        version = "18.2.0"
+        npmVersion = "8.9.0"
+        download = true
+        distBaseUrl = 'https://nodejs.org/dist'
+        workDir = file("${project.projectDir}/nodejs")
+        nodeModulesDir = file("${project.projectDir}/")
+    }
+
+    // task npmClean(type: Delete) {
+    //     final def webDir = "${rootDir}/web"
+    //     delete "${webDir}/nodejs"
+    //     delete "${webDir}/node_modules"
+    //     delete "${webDir}/dist"
+    //     delete "${webDir}/coverage"
+    // }
+
+    task npmBuild(type: Copy) {
+        from fileTree("${rootDir}/web/dist/web")
+        into file("${rootDir}/src/main/resources/static")
+    }
+
+    // task npmDevBuild(type: Copy) {
+    //     from fileTree("${rootDir}/web/dist")
+    //     into file("${rootDir}/gensrc/main/resources/static")
+    // }
+
+    // task npmTest(type: Copy) {
+    //     from fileTree("${rootDir}/web/test-report")
+    //     into file("${project.rootProject.buildDir}/test-results/ui")
+    // }
+
+//    npmBuild.dependsOn(npm_install)
+    //npmBuild.dependsOn(npm_run_test)
+//    npmBuild.dependsOn(npm_run_build)
+//    processResources.dependsOn(npmBuild)
+    // npmDevBuild.dependsOn(npm_install)
+    // npmDevBuild.dependsOn(npm_run_buildDev)
+    // npmDevBuild.dependsOn(npm_run_test)
+}
+
+println 'from project properties = ' + project.getProperties()
+// if (project.getProperties().get('prodMode') != null && project.getProperties().get('prodMode') == 'true') {
+    println 'including web prodBuild'
+    processResources.dependsOn project(":spring-angular-integration-web").tasks.npmBuild
+//     clean.dependsOn project(":springangularintegration-web").tasks.npmClean
+// } else if (project.getProperties().get('devMode') != null && project.getProperties().get('devMode') == 'true') {
+//     println 'including web devBuild'
+//     processResources.dependsOn project(":springangularintegration-web").tasks.npmDevBuild
+//     clean.dependsOn project(":springangularintegration-web").tasks.npmClean
+// } else {
+//     println 'excluding web build'
+// }

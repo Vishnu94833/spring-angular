@@ -1,0 +1,5 @@
+rootProject.name = 'spring-angular-integration'
+
+
+include "spring-angular-integration-web"
+project(":spring-angular-integration-web").projectDir = file("web")
