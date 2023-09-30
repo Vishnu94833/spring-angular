@@ -1,0 +1,13 @@
+<div fxLayout="row" fxLayoutAlign="center center">
+    <button mat-button (click)="buildHandler('Igloo')">Igloo</button>
+    <button mat-button (click)="buildHandler('Castle')">Castle</button>
+    <button mat-button (click)="buildHandler('HouseBoat')">House Boat</button>
+</div>
+<div fxLayout="row" fxLayoutAlign="center center">
+
+    <pre><h1 [class]="classHandler()">{{vm | json}} </h1></pre>
+
+    <!-- <input type="text" [(ngModel)]="data.Address">
+    <button (click)="saveData()">SaveData</button> -->
+
+</div>

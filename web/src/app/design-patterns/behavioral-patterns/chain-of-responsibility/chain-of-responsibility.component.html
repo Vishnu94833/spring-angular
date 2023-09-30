@@ -1,0 +1,15 @@
+<div fxLayoutAlign="center center">
+    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px">
+        <h1>
+            Enter amount to withdrawal :
+        </h1>
+        <mat-form-field>
+            <input type="text" matInput [(ngModel)]="inputValue">
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" (click)="getAmount(inputValue)">Click</button>
+    </div>
+    <div fxLayout="row">
+        <pre></pre>
+    </div>
+</div>
