@@ -1,63 +1,71 @@
 package com.learnings.springangularintegration.rest;
 
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.learnings.springangularintegration.dto.ErrorResponseDto;
-import com.learnings.springangularintegration.dto.LoginRequestDto;
-import com.learnings.springangularintegration.dto.LoginResponseDto;
-import com.learnings.springangularintegration.dto.UserCredDto;
+import com.learnings.springangularintegration.model.User;
+import com.learnings.springangularintegration.model.request.AuthRequest;
+import com.learnings.springangularintegration.model.response.AuthResponse;
+import com.learnings.springangularintegration.repository.UserRepository;
 import com.learnings.springangularintegration.utils.JwtUtil;
 
 @RestController()
 @RequestMapping("/auth")
 public class AuthController
 {
-//    private final AuthenticationManager authenticationManager;
-//
-//
-//    private JwtUtil jwtUtil;
-//    public AuthController(AuthenticationManager authenticationManager, JwtUtil jwtUtil) {
-//        this.authenticationManager = authenticationManager;
-//        this.jwtUtil = jwtUtil;
-//
-//    }
 
-//    @ResponseBody
-//    @RequestMapping(value = "/login",method = RequestMethod.POST)
-//    public ResponseEntity login(@RequestBody LoginRequestDto loginReq)  {
-//
-//        try {
-//            Authentication authentication =
-//                    authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginReq.getEmail(), loginReq.getPassword()));
-//            String email = authentication.getName();
-//            UserCredDto user = new UserCredDto(email,"");
-//            String token = jwtUtil.createToken(user);
-//            LoginResponseDto loginRes = new LoginResponseDto(email,token);
-//
-//            return ResponseEntity.ok(loginRes);
-//
-//        }catch (BadCredentialsException e){
-//            ErrorResponseDto errorResponse = new ErrorResponseDto(HttpStatus.BAD_REQUEST,"Invalid username or password");
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
-//        }catch (Exception e){
-//            ErrorResponseDto errorResponse = new ErrorResponseDto(HttpStatus.BAD_REQUEST, e.getMessage());
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
-//        }
-//    }
+    @Autowired
+    AuthenticationManager authManager;
 
-    @GetMapping("login")
-    public String helloWorld()  {
-        return "Hello World!";
+    @Autowired
+    JwtUtil jwtUtil;
+
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
+    @PostMapping("token")
+    public ResponseEntity<?> login(@RequestBody @Valid AuthRequest request)
+    {
+        try
+        {
+            Authentication authentication = authManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+
+            User user = (User) authentication.getPrincipal();
+            String accessToken = jwtUtil.generateAccessToken(user);
+            AuthResponse response = new AuthResponse(user.getEmail(), accessToken);
+
+            return ResponseEntity.ok().body(response);
+
+        }
+        catch (BadCredentialsException ex)
+        {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    }
+
+    @PostMapping("register")
+    public ResponseEntity<?> helloWorld(@RequestBody @Valid AuthRequest request)
+    {
+        String encodedPassword = passwordEncoder.encode(request.getPassword());
+        request.setPassword(encodedPassword);
+        User response = userRepository.save(new User(request.getEmail(), encodedPassword));
+        return ResponseEntity.ok().body(response);
     }
 }

@@ -1,107 +1,71 @@
 package com.learnings.springangularintegration.utils;
 
 import java.util.Date;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
 
-import javax.naming.AuthenticationException;
-import javax.servlet.http.HttpServletRequest;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.learnings.springangularintegration.dto.UserCredDto;
+import com.learnings.springangularintegration.model.User;
 
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.SignatureException;
 
-//@Component
+@Component
 public class JwtUtil
 {
+    private static final Logger LOGGER = LoggerFactory.getLogger(JwtUtil.class);
 
-//    private final String secret_key = "mysecretkey";
-//
-//    private long accessTokenValidity = 60 * 60 * 1000;
-//
-//    private final JwtParser jwtParser;
-//
-//    private final String TOKEN_HEADER = "Authorization";
-//
-//    private final String TOKEN_PREFIX = "Bearer ";
-//
-//    public JwtUtil(JwtParser jwtParser)
-//    {
-//        this.jwtParser = Jwts.parser().setSigningKey(secret_key);
-//        ;
-//    }
-//
-//    public String createToken(UserCredDto user)
-//    {
-//        Claims claims = Jwts.claims().setSubject(user.getEmail());
-//        claims.put("firstName", user.getFirstName());
-//        claims.put("lastName", user.getLastName());
-//        Date tokenCreateTime = new Date();
-//        Date tokenValidity = new Date(tokenCreateTime.getTime() + TimeUnit.MINUTES.toMillis(accessTokenValidity));
-//        return Jwts.builder().setClaims(claims).setExpiration(tokenValidity)
-//                .signWith(SignatureAlgorithm.HS256, secret_key).compact();
-//    }
-//
-//    private Claims parseJwtClaims(String token)
-//    {
-//        return jwtParser.parseClaimsJws(token).getBody();
-//    }
-//
-//    public Claims resolveClaims(HttpServletRequest req)
-//    {
-//        try
-//        {
-//            String token = resolveToken(req);
-//            if (token != null)
-//            {
-//                return parseJwtClaims(token);
-//            }
-//            return null;
-//        }
-//        catch (ExpiredJwtException ex)
-//        {
-//            req.setAttribute("expired", ex.getMessage());
-//            throw ex;
-//        }
-//        catch (Exception ex)
-//        {
-//            req.setAttribute("invalid", ex.getMessage());
-//            throw ex;
-//        }
-//    }
-//
-//    public String resolveToken(HttpServletRequest request)
-//    {
-//
-//        String bearerToken = request.getHeader(TOKEN_HEADER);
-//        if (bearerToken != null && bearerToken.startsWith(TOKEN_PREFIX))
-//        {
-//            return bearerToken.substring(TOKEN_PREFIX.length());
-//        }
-//        return null;
-//    }
-//
-//    public boolean validateClaims(Claims claims) throws AuthenticationException
-//    {
-//        try
-//        {
-//            return claims.getExpiration().after(new Date());
-//        }
-//        catch (Exception e)
-//        {
-//            throw e;
-//        }
-//    }
-//
-//    public String getEmail(Claims claims)
-//    {
-//        return claims.getSubject();
-//    }
-//
-//    private List<String> getRoles(Claims claims)
-//    {
-//        return (List<String>) claims.get("roles");
-//    }
+    private static final long EXPIRE_DURATION = 24 * 60 * 60 * 1000; // 24 hour
+
+    private String SECRET_KEY = "vishnukuppansujathaabhithavishnukuppansujathaabhithavishnukuppansujathaabhithavishnukuppansujathaabhitha";
+
+    public String generateAccessToken(User user)
+    {
+        return Jwts.builder().setSubject(String.format("%s,%s", user.getId(), user.getEmail())).setIssuer("VKuppan")
+                .setIssuedAt(new Date()).setExpiration(new Date(System.currentTimeMillis() + EXPIRE_DURATION))
+                .signWith(SignatureAlgorithm.HS512, SECRET_KEY).compact();
+    }
+
+    public boolean validateAccessToken(String token)
+    {
+        try
+        {
+            Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token);
+            return true;
+        }
+        catch (ExpiredJwtException ex)
+        {
+            LOGGER.error("JWT expired", ex.getMessage());
+        }
+        catch (IllegalArgumentException ex)
+        {
+            LOGGER.error("Token is null, empty or only whitespace", ex.getMessage());
+        }
+        catch (MalformedJwtException ex)
+        {
+            LOGGER.error("JWT is invalid", ex);
+        }
+        catch (UnsupportedJwtException ex)
+        {
+            LOGGER.error("JWT is not supported", ex);
+        }
+        catch (SignatureException ex)
+        {
+            LOGGER.error("Signature validation failed");
+        }
+
+        return false;
+    }
+
+    public String getSubject(String token)
+    {
+        return parseClaims(token).getSubject();
+    }
+
+    private Claims parseClaims(String token)
+    {
+        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
+    }
 }
