@@ -16,7 +16,7 @@ export class AuthService {
     this.http.post<AuthResponse>('./auth/token', user).subscribe((res)=>{
       console.log(res);
       localStorage.setItem("token",res.accessToken);
-      this.router.navigate(['/design-patterns'])
+      this.router.navigate(['/posts'])
     });
   }
 
