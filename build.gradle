@@ -75,9 +75,9 @@ project(":spring-angular-integration-web") {
     //     into file("${project.rootProject.buildDir}/test-results/ui")
     // }
 
-//    npmBuild.dependsOn(npm_install)
+   npmBuild.dependsOn(npm_install)
     //npmBuild.dependsOn(npm_run_test)
-//    npmBuild.dependsOn(npm_run_build)
+   npmBuild.dependsOn(npm_run_build)
 //    processResources.dependsOn(npmBuild)
     // npmDevBuild.dependsOn(npm_install)
     // npmDevBuild.dependsOn(npm_run_buildDev)

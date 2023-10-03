@@ -46,3 +46,7 @@ out/
 # dependencies
 /node_modules
 /nodejs
+web/node_modules
+web/dist
+web/.angular
+web/nodejs
