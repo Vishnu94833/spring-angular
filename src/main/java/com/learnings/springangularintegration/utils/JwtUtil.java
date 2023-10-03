@@ -23,7 +23,7 @@ public class JwtUtil
 
     public String generateAccessToken(User user)
     {
-        return Jwts.builder().setSubject(String.format("%s,%s", user.getId(), user.getEmail())).setIssuer("VKuppan")
+        return Jwts.builder().setSubject(user.getEmail()).setIssuer("VKuppan")
                 .setIssuedAt(new Date()).setExpiration(new Date(System.currentTimeMillis() + EXPIRE_DURATION))
                 .signWith(SignatureAlgorithm.HS512, SECRET_KEY).compact();
     }
@@ -32,6 +32,7 @@ public class JwtUtil
     {
         try
         {
+//            Jwts.parserBuilder().requireAudience(SECRET_KEY).build().parse(token)
             Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token);
             return true;
         }
