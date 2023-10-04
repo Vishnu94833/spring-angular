@@ -50,3 +50,4 @@ web/node_modules
 web/dist
 web/.angular
 web/nodejs
+web/package-lock.json
