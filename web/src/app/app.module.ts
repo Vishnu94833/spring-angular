@@ -1,8 +1,6 @@
 import { CommonModule, DatePipe } from '@angular/common';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import {
-  CUSTOM_ELEMENTS_SCHEMA, NgModule
-} from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -13,10 +11,7 @@ import { MaterialModule } from './material.module';
 import { HeaderInterceptor } from './core/interceptor/http.inteceptor';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    FallbackComponent
-  ],
+  declarations: [AppComponent, FallbackComponent],
   imports: [
     HttpClientModule,
     BrowserModule,
@@ -24,14 +19,17 @@ import { HeaderInterceptor } from './core/interceptor/http.inteceptor';
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
-    CommonModule
+    CommonModule,
   ],
-  providers: [DatePipe, {
-    provide: HTTP_INTERCEPTORS,
-    useClass: HeaderInterceptor,
-    multi: true
-  }],
+  providers: [
+    DatePipe,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HeaderInterceptor,
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class AppModule { }
+export class AppModule {}

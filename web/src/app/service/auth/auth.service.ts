@@ -13,7 +13,9 @@ export class AuthService {
   constructor(private http: HttpClient, private router: Router) {}
 
   login(user: User) {
-    this.http.post<AuthResponse>('./auth/token', user).subscribe((res)=>{
+  debugger
+    this.http.post('./auth/token', user)
+    .subscribe((res:any)=>{
       console.log(res);
       localStorage.setItem("token",res.accessToken);
       this.router.navigate(['/posts'])

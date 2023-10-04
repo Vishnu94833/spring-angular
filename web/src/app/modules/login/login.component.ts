@@ -16,6 +16,7 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {}
 
   onLogin(userName: string, password: string) {
+  debugger
     this.authService.login(new User(userName, password))
   }
 }

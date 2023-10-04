@@ -10,13 +10,11 @@ const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' }, //default route
   {
     path: 'login',
-    loadChildren: () =>
-      import('./modules/login/login.module').then((m) => m.LoginModule),
+    loadChildren: async () => (await import('./modules/login/login.module')).LoginModule,
   },
   {
     path: 'posts',
-    loadChildren: () =>
-      import('./modules/posts/posts.module').then((m) => m.PostsModule),
+    loadChildren: async () => (await import('./modules/posts/posts.module')).PostsModule,
     canLoad: [AuthGuard],
   },
   {
