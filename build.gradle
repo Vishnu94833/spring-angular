@@ -44,8 +44,8 @@ tasks.named('test') {
 project(":spring-angular-integration-web") {
 
     node {
-        version = "18.2.0"
-        npmVersion = "8.9.0"
+        version = "18.12.1"
+        npmVersion = "8.19.2"
         download = true
         distBaseUrl = 'https://nodejs.org/dist'
         workDir = file("${project.projectDir}/nodejs")
