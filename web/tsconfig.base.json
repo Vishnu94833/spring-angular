@@ -15,7 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@nx-angular/library": ["library/src/index.ts"]
+      "@nx-angular/posts": ["libs/posts/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -1,7 +1,7 @@
 {
-  "name": "library",
-  "$schema": "../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "library/src",
+  "name": "posts",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/posts/src",
   "prefix": "nx-angular",
   "tags": [],
   "projectType": "library",
@@ -10,7 +10,7 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "library/jest.config.ts",
+        "jestConfig": "libs/posts/jest.config.ts",
         "passWithNoTests": true
       },
       "configurations": {
@@ -24,7 +24,7 @@
       "executor": "@nx/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["library/**/*.ts", "library/**/*.html"]
+        "lintFilePatterns": ["libs/posts/**/*.ts", "libs/posts/**/*.html"]
       }
     }
   }
