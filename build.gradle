@@ -52,13 +52,13 @@ project(":spring-angular-integration-web") {
         nodeModulesDir = file("${project.projectDir}/")
     }
 
-    // task npmClean(type: Delete) {
-    //     final def webDir = "${rootDir}/web"
-    //     delete "${webDir}/nodejs"
-    //     delete "${webDir}/node_modules"
-    //     delete "${webDir}/dist"
-    //     delete "${webDir}/coverage"
-    // }
+    task npmClean(type: Delete) {
+        final def webDir = "${rootDir}/web"
+        delete "${webDir}/nodejs"
+        delete "${webDir}/node_modules"
+        delete "${webDir}/dist"
+        delete "${webDir}/coverage"
+    }
 
     task npmBuild(type: Copy) {
         from fileTree("${rootDir}/web/dist/web")
