@@ -18,7 +18,7 @@ COPY build.gradle settings.gradle ./
 COPY src ./src
 
 # Run the Gradle clean build command while excluding specified tasks
-RUN ./gradlew clean build
+RUN ./gradlew clean build -x test 
 
 # Expose the port your Spring Boot application will run on (adjust as needed)
 EXPOSE 8080

@@ -44,8 +44,8 @@ tasks.named('test') {
 project(":spring-angular-integration-web") {
 
     node {
-        version = "18.12.1"
-        npmVersion = "8.19.2"
+        version = "20.8.0"
+        npmVersion = "10.1.0"
         download = true
         distBaseUrl = 'https://nodejs.org/dist'
         workDir = file("${project.projectDir}/nodejs")
@@ -54,10 +54,10 @@ project(":spring-angular-integration-web") {
 
     task npmClean(type: Delete) {
         final def webDir = "${rootDir}/web"
-        delete "${webDir}/nodejs"
-        delete "${webDir}/node_modules"
-        delete "${webDir}/dist"
-        delete "${webDir}/coverage"
+        // delete "${webDir}/nodejs"
+        // delete "${webDir}/node_modules"
+        // delete "${webDir}/dist"
+        // delete "${webDir}/coverage"
     }
 
     task npmBuild(type: Copy) {
@@ -75,9 +75,9 @@ project(":spring-angular-integration-web") {
     //     into file("${project.rootProject.buildDir}/test-results/ui")
     // }
 
-  npmBuild.dependsOn(npm_install)
+//   npmBuild.dependsOn(npm_install)
     //npmBuild.dependsOn(npm_run_test)
-  npmBuild.dependsOn(npm_run_build)
+//   npmBuild.dependsOn(npm_run_build)
 //    processResources.dependsOn(npmBuild)
     // npmDevBuild.dependsOn(npm_install)
     // npmDevBuild.dependsOn(npm_run_buildDev)
@@ -87,7 +87,7 @@ project(":spring-angular-integration-web") {
 println 'from project properties = ' + project.getProperties()
 // if (project.getProperties().get('prodMode') != null && project.getProperties().get('prodMode') == 'true') {
     println 'including web prodBuild'
-    processResources.dependsOn project(":spring-angular-integration-web").tasks.npmBuild
+    // processResources.dependsOn project(":spring-angular-integration-web").tasks.npmBuild
 //     clean.dependsOn project(":springangularintegration-web").tasks.npmClean
 // } else if (project.getProperties().get('devMode') != null && project.getProperties().get('devMode') == 'true') {
 //     println 'including web devBuild'
